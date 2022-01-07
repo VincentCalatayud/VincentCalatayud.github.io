@@ -5,14 +5,22 @@
     <title>CartoTD1</title>
   </head>
   <body>
-      <h1>Ma position :</h1>
+      <h1>Orientation :</h1>
       <div><p id="pos"></p></div>
+
+      <h1>Accélération et rotation :</h1>
+      <div><p id="pos1"></p></div>
     
   </body>
   <script>
       var x = document.getElementById("pos");
+      var y = document.getElementById("pos1");
       window.addEventListener('deviceorientation', function(event) {
         x.innerHTML ="x : " + event.alpha + "<br>y : " + event.beta + "<br>z : " + event.gamma;
+        });
+
+        window.addEventListener('devicemotion', function(event) {
+        y.innerHTML = "x : " + event.accelerationIncludingGravity.x + "<br>y : " + event.accelerationIncludingGravity.y + "<br>z : " + event.accelerationIncludingGravity.z;
         });
   </script>
 </html>
