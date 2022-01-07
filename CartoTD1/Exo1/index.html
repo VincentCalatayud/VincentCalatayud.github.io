@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CartoTD1</title>
+  </head>
+  <body>
+      <h1>Ma position (By getCurrentPosition):</h1>
+      <div><p id="pos"></p></div>
+    
+  </body>
+  <script>
+      var x = document.getElementById("pos");
+      function getLocation(){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+            else{
+                x.innerHTML= "Géolocalisation n'est pas prise en charge par ce navigateur.";
+            }
+      }
+
+      function showPosition(position)
+      {
+        x.innerHTML="Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Précision: " + position.coords.accuracy;    
+      }
+      Document.addEventListener("DOMContentLoaded",getLocation());
+  </script>
+</html>
