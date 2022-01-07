@@ -14,6 +14,7 @@
       function getLocation(){
             if(navigator.geolocation){
                 navigator.geolocation.getCurrentPosition(showPosition);
+                navigator.geolocation.watchPosition(showPosition2);
             }
             else{
                 x.innerHTML= "Géolocalisation n'est pas prise en charge par ce navigateur.";
@@ -22,7 +23,12 @@
 
       function showPosition(position)
       {
-        x.innerHTML="Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;    
+        x.innerHTML="Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Précision" + position.coords.accuracy;    
+      }
+
+      function showPosition2(position)
+      {
+        x.innerHTML="Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Précision" + position.coords.accuracy;    
       }
 
       Document.addEventListener("DOMContentLoaded",getLocation());
