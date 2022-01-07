@@ -12,7 +12,7 @@
       var x = document.getElementById("pos");
       function getLocation(){
             if(navigator.geolocation){
-                navigator.geolocation.getCurrentPosition(showPosition)
+                navigator.geolocation.getCurrentPosition(showPosition);
             }
             else{
                 x.innerHTML= "Géolocalisation n'est pas prise en charge par ce navigateur.";
