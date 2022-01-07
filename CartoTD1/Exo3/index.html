@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CartoTD1</title>
+  </head>
+  <body>
+      <h1>Ma position :</h1>
+      <div><p id="pos"></p></div>
+    
+  </body>
+  <script>
+      var x = document.getElementById("pos");
+      window.addEventListener('deviceorientation', function(event) {
+        x.innerHTML ="z : " + event.alpha + "<br>x : " + event.beta + "<br>y : " + event.gamma;
+        });
+  </script>
+</html>
