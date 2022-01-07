@@ -5,12 +5,15 @@
     <title>CartoTD1</title>
   </head>
   <body>
-      <h1>Ma position:</h1>
-    <div><p id="pos"></p></div>
+      <h1>Ma position (By getCurrentPosition):</h1>
+      <div><p id="pos"></p></div>
+      <h1>Ma position (By watchPosition):</h1>
+      <div><p id="pos1"></p></div>
     
   </body>
   <script>
       var x = document.getElementById("pos");
+      var y = document.getElementById("pos1");
       function getLocation(){
             if(navigator.geolocation){
                 navigator.geolocation.getCurrentPosition(showPosition);
@@ -28,7 +31,7 @@
 
       function showPosition2(position)
       {
-        x.innerHTML="Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Précision" + position.coords.accuracy;    
+        y.innerHTML="Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Précision" + position.coords.accuracy;    
       }
 
       Document.addEventListener("DOMContentLoaded",getLocation());
