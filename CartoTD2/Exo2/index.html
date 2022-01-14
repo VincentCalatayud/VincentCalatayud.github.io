@@ -14,7 +14,7 @@
       <h1>Position(cercle stamen):</h1>
       <div id="map2" style="height: 500px;"></div>
       <h1>Distance entre ma position et marseille:</h1>
-      <div><p id="pos"></p></div>
+      <div id="map3" style="height: 500px;"></div>
     
   </body>
   <script>
@@ -44,17 +44,27 @@
                 center: new L.LatLng(37.7, -122.4),
                 zoom: 12
             });
-            map2.addLayer(layer);
+
+            map2.addLayer([position.coords.latitude, position.coords.longitude]);
 
             L.circle([position.coords.latitude, position.coords.longitude], {radius: position.coords.accuracy}).addTo(map2);
 
-            var from = turf.point([position.coords.latitude, position.coords.longitude]);
-            var to = turf.point([43.2904103,5.3875931]);
-            var options = {units: 'miles'};
+            var map = L.map('map3').setView([position.coords.latitude, position.coords.longitude], position.coords.accuracy);
 
-            var distance = turf.distance(from, to, options);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map3);
+            
+            var markFrom = L.marker([43.69, 7.27]).addTo(map3);
+            var markTo = L.marker([43.3, 5.4]).addTo(map3);
 
-            Document.getElementById("pos").innerHTML = "Distance:"+ distance;
+            var from = markFrom.getLatLng();
+            var to = markTo.getLatLng();
+            
+            var ligne = [[43.69, 7.27], [43.3, 5.4]];
+            var polyline = L.polyline(ligne, {color: 'red'}).addTo(map3)
+            .bindPopup("Marseille-Nice à dos d'éléphant: "+ (from.distanceTo(to)/1000).toFixed(0.1)+'km')
+            .openPopup();
       }
       Document.addEventListener("DOMContentLoaded",getLocation());
   </script>
