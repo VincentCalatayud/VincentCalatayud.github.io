@@ -3,13 +3,15 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
     <title>CartoTD1</title>
   </head>
   <body>
       <h1>Triangle des Bermudes:</h1>
       <div><p id="pos"></p></div>
-      <div id="map" style="height: 180px;"></div>
+      <div id="map" style="height: 500px;"></div>
+      <div id="map2" style="height: 500px;"></div>
     
   </body>
   <script>
@@ -32,6 +34,16 @@
             }).addTo(map);
             
             L.polygon([[18.466, -66.118],[32.321, -64.757],[25.774, -80.19]], {color: 'red'}).addTo(map);
+
+
+            var layer = new L.StamenTileLayer("toner");
+            var map2 = new L.Map("map2", {
+                center: new L.LatLng(37.7, -122.4),
+                zoom: 12
+            });
+            map2.addLayer(layer);
+
+            L.circle([position.coords.latitude, position.coords.longitude], {radius: position.coords.accuracy}).addTo(map2);
       }
       Document.addEventListener("DOMContentLoaded",getLocation());
   </script>
