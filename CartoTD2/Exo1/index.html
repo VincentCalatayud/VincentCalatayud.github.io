@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <title>CartoTD1</title>
+  </head>
+  <body>
+      <h1>Ma position (By getCurrentPosition):</h1>
+      <div><p id="pos"></p></div>
+      <div id="map" style="height: 180px;"></div>
+    
+  </body>
+  <script>
+      var x = document.getElementById("pos");
+      function getLocation(){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+            else{
+                x.innerHTML= "Géolocalisation n'est pas prise en charge par ce navigateur.";
+            }
+      }
+
+      function showPosition(position)
+      {
+        x.innerHTML="Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>Précision: " + position.coords.accuracy;
+        var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], position.coords.accuracy);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+        L.marker([position.coords.latitude, position.coords.longitude]).addTo(map)
+            .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+            .openPopup();    
+      }
+      Document.addEventListener("DOMContentLoaded",getLocation());
+  </script>
+</html>
