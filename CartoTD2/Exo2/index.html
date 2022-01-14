@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
     <title>CartoTD1</title>
   </head>
   <body>
@@ -44,6 +45,12 @@
             map2.addLayer(layer);
 
             L.circle([position.coords.latitude, position.coords.longitude], {radius: position.coords.accuracy}).addTo(map2);
+
+            var from = turf.point([position.coords.latitude, position.coords.longitude]);
+            var to = turf.point([43.2904103,5.3875931]);
+            var options = {units: 'kilometers'};
+
+            var distance = turf.distance(from, to, options);
       }
       Document.addEventListener("DOMContentLoaded",getLocation());
   </script>
