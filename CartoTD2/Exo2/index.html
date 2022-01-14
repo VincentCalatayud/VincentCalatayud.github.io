@@ -50,11 +50,11 @@
 
             var from = turf.point([position.coords.latitude, position.coords.longitude]);
             var to = turf.point([43.2904103,5.3875931]);
-            var options = {units: 'kilometers'};
+            var options = {units: 'miles'};
 
             var distance = turf.distance(from, to, options);
 
-            Document.getElementById("pos").innerHTML = distance;
+            Document.getElementById("pos").innerHTML = "Distance:"+ distance;
       }
       Document.addEventListener("DOMContentLoaded",getLocation());
   </script>
