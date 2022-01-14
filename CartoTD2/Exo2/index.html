@@ -13,6 +13,8 @@
       <div id="map" style="height: 500px;"></div>
       <h1>Position(cercle stamen):</h1>
       <div id="map2" style="height: 500px;"></div>
+      <h1>Distance entre ma position et marseille:</h1>
+      <div><p id="pos"></p></div>
     
   </body>
   <script>
@@ -51,6 +53,8 @@
             var options = {units: 'kilometers'};
 
             var distance = turf.distance(from, to, options);
+
+            Document.getElementById("pos").innerHTML = distance;
       }
       Document.addEventListener("DOMContentLoaded",getLocation());
   </script>
