@@ -49,7 +49,7 @@
 
             L.circle([position.coords.latitude, position.coords.longitude], {radius: position.coords.accuracy}).addTo(map2);
 
-            var map = L.map('map3').setView([position.coords.latitude, position.coords.longitude], position.coords.accuracy);
+            var map3 = L.map('map3').setView([43.26, 6.64], 8);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
