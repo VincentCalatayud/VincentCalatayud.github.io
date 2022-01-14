@@ -30,6 +30,7 @@
 
       function showPosition(position)
       {
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], position.coords.accuracy);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -38,6 +39,8 @@
             
             L.polygon([[18.466, -66.118],[32.321, -64.757],[25.774, -80.19]], {color: 'red'}).addTo(map);
 
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             var layer = new L.StamenTileLayer("toner");
             var map2 = new L.Map("map2", {
@@ -49,7 +52,10 @@
 
             L.circle([position.coords.latitude, position.coords.longitude], {radius: position.coords.accuracy}).addTo(map2);
 
-            var map3 = L.map('map3').setView([43.26, 6.64], 8);
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            var map3 = new L.map('map3').setView([43.26, 6.64], 8);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -65,6 +71,8 @@
             var polyline = L.polyline(ligne, {color: 'red'}).addTo(map3)
             .bindPopup("Marseille-Nice à dos d'éléphant: "+ (from.distanceTo(to)/1000).toFixed(0.1)+'km')
             .openPopup();
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       }
       Document.addEventListener("DOMContentLoaded",getLocation());
   </script>
