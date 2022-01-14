@@ -14,7 +14,7 @@
       <h1>Position(cercle stamen):</h1>
       <div id="map2" style="height: 500px;"></div>
       <h1>Distance entre ma position et marseille:</h1>
-      <div id="map3" style="height: 500px;"></div>
+      <div><p id="dist"></p></div>
     
   </body>
   <script>
@@ -51,6 +51,23 @@
             map2.addLayer(layer);
 
             L.circle([position.coords.latitude, position.coords.longitude], {radius: position.coords.accuracy}).addTo(map2);
+
+
+
+        var from = turf.point([43.6977423,7.2698294]);
+        var to = turf.point([43.2904103,5.3875931]);
+        var options = {units: 'kilometers'};
+        var distance = turf.distance(from, to, options);
+        alert("Distance entre ma position et Marseille : " + distance + " km.");
+        document.getElementById("dist").innerHTML = distance + "km.";
+
+        // Ligne entre Marseille - Nice
+        var line = new L.Polyline([[43.6977423,7.2698294], [43.2904103,5.3875931]], {
+            color: 'blue',
+            weight: 3,
+            opacity: 0.5,
+            smoothFactor: 1
+        }).addTo(map2);
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
