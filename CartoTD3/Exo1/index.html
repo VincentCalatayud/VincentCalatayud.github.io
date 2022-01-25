@@ -8,6 +8,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>TP3 exercice 1</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            #porte {
+                fill:orange;
+            }
+            #porte:hover {
+                fill: #fd30b9;
+            }
+        </style>
     </head>
   <title>HTML5  l’élément Canvas</title>
   </head>
@@ -18,7 +26,39 @@
             <img id="paysage" src="./res/pay.jpg" width="500" height="500" />
         </div>
     </canvas>
+    <h2>Partie SVG</h2>
+    <div>
+        <svg width="500" height="300">
+            <rect id="ciel" x="0" y="0" width="500" height="200" style="fill:cyan" />
+            <rect x="0" y="200" width="500" height="100" style="fill:greenyellow" />
+
+            <polygon points="0,200 75,50 150,200" style="fill:#ffd573;" />
+            <polygon points="140,200 180,100 220,200" style="fill:#ffd573;" />
+            <polygon points="205,200 280,75 355,200" style="fill:#ffd573;" />
+            <polygon points="340,200 420,69 500,200" style="fill:#ffd573;" />
+
+            <circle id="soleil" cx="350" cy="50" r="30" style="fill:#FFFF00;" onclick="change()"/>
+
+            <rect x="25" y="215" width="80" height="75" style="fill:brown" />
+            <rect id="porte" x="40" y="245" width="35" height="45" />
+
+            <polygon points="25,215 65,180 105,215" style="fill:#FF0000;" />
+        </svg>
+    </div>
   <script>
+      var verif = false;
+      function change(){
+        if (verif ==  false){
+            document.getElementById('ciel').style.fill ='rgb(0, 0, 0)'
+            verif = true;
+        }
+        else {
+            document.getElementById('ciel').style.fill ='rgb(0, 0, 255)'
+            verif = false;
+        }
+        
+      }
+
        function drawCanvas() {
         var canvas = document.getElementById("moncanvas");
         if (canvas.getContext) {
