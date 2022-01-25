@@ -8,7 +8,7 @@
     <h2>Partie Canvas</h2>
     <canvas id="moncanvas" width="250" height="200">
         <div>
-            <img id="prairie" src="prairie.jpg" width="150" height="150" />
+            <img id="paysage" src="./res/paysage.jfif" width="150" height="150" />
         </div>
     </canvas>
   <script>
@@ -16,7 +16,7 @@
         var canvas = document.getElementById("moncanvas");
         if (canvas.getContext) {
             var ctx = canvas.getContext("2d");
-            ctx.drawImage(document.getElementById('prairie'), 50, 50, 3840, 2160, 0, 0, 160, 160);
+            ctx.drawImage(document.getElementById('paysage'), 50, 50, 3840, 2160, 0, 0, 160, 160);
             //Rectangle
             ctx.fillStyle = 'rgb(150, 150, 150)';
             ctx.fillRect(20, 120, 30, 30);
