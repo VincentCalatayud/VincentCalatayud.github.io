@@ -26,22 +26,22 @@
             ctx.drawImage(document.getElementById('paysage'), 40, 20);
             //Rectangle
             ctx.fillStyle = 'rgb(150, 150, 150)';
-            ctx.fillRect(20, 120, 30, 30);
+            ctx.fillRect(190, 160, 30, 30);
             //Porte
             ctx.fillStyle = 'rgb(200, 120, 0)';
-            ctx.fillRect(25, 130, 10, 20);
+            ctx.fillRect(195, 170, 10, 20);
             // Triangle
             ctx.fillStyle = 'rgb(200,100,100)';
             ctx.beginPath();
-            ctx.moveTo(20, 120);
-            ctx.lineTo(35, 100);
-            ctx.lineTo(50, 120);
+            ctx.moveTo(190, 160);
+            ctx.lineTo(205, 140);
+            ctx.lineTo(220, 160);
             ctx.fill();
             ctx.closePath();
             //Cercle
             ctx.fillStyle = 'rgb(255,255,0)';
             ctx.beginPath();
-            ctx.arc(100, 50, 10, 0, Math.PI * 2, true);
+            ctx.arc(185, 95, 10, 0, Math.PI * 2, true);
             ctx.fill();
             ctx.closePath();
         }
