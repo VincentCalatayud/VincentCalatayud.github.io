@@ -13,7 +13,7 @@
   </head>
   <body>
     <h2>Partie Canvas</h2>
-    <canvas id="moncanvas" width="250" height="200">
+    <canvas id="moncanvas" width="500" height="500">
         <div>
             <img id="paysage" src="./res/pay.jpg" width="500" height="500" />
         </div>
@@ -23,7 +23,7 @@
         var canvas = document.getElementById("moncanvas");
         if (canvas.getContext) {
             var ctx = canvas.getContext("2d");
-            ctx.drawImage(document.getElementById('paysage'), 15, 20);
+            ctx.drawImage(document.getElementById('paysage'), 40, 20);
             //Rectangle
             ctx.fillStyle = 'rgb(150, 150, 150)';
             ctx.fillRect(20, 120, 30, 30);
