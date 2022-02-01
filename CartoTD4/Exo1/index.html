@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="https://threejs.org/build/three.js"></script>
+		<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+		<script>
+
+            var x;
+            var y;
+            var z;
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			camera.position.set(1,0,3);
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+            const controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+			const geometryE = new THREE.SphereGeometry(1, 32, 32);
+			const textureE = new THREE.TextureLoader().load( './img/2k_earth_daymap.jpg' );
+			const materialTexE = new THREE.MeshBasicMaterial( { map: textureE } );
+			const earth = new THREE.Mesh( geometryE, materialTexE );
+			earth.position.set(0,0,0);
+			scene.add( earth ) ;
+
+            const light = new THREE.AmbientLight(0xffffff);
+            scene.add(light);
+
+
+            // White directional light at half intensity shining from the top.
+			const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.5 );
+			scene.add( directionalLight );
+
+            function getLocation(){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+            }
+
+            function showPosition(position)
+            {
+                var point = convertisseur(position.coords.latitude, position.coords.longitude);
+                
+                const geo = new THREE.SphereGeometry(0.01, 32, 32);
+                const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+                const sphere = new THREE.Mesh( geo, material );
+                sphere.position.set(point[0],point[1],point[2]);
+                scene.add(sphere);
+                
+            }
+
+            function convertisseur(lat, long)
+            {
+                var tab = [];
+                var latitudeConv = lat * (Math.PI / 180);
+                var longitudeConv = -long * (Math.PI / 180);
+                tab[0] = Math.cos(latitudeConv)*Math.cos(longitudeConv);
+                tab[2] = Math.cos(latitudeConv)*Math.sin(longitudeConv);
+                tab[1] = Math.sin(latitudeConv);
+
+                return tab;
+            }
+
+            function afficherPays(){
+                fetch("https://restcountries.com/v3.1/all")
+                .then(response => response.json())
+                .then(response => {
+                    //response.forEach(element => convertisseur(element.latlng[0], element.latlng[1])
+                    response.forEach(element => {
+                    var tabPoint = convertisseur(element.latlng[0], element.latlng[1]);
+                    const geo = new THREE.SphereGeometry(0.01, 32, 32);
+                    const texture = new THREE.TextureLoader().load( element.flags.png );
+                    const material = new THREE.MeshBasicMaterial(  { map: texture } );
+                    const sphere = new THREE.Mesh( geo, material );
+                    sphere.position.set(tabPoint[0],tabPoint[1],tabPoint[2]);
+                    scene.add(sphere);
+
+                })})
+                .catch(error => alert("Erreur : " + error));
+            }
+
+			const animate = function () {
+				requestAnimationFrame( animate );
+                renderer.render( scene, camera );
+			};
+
+			animate();
+            getLocation();
+            afficherPays();
+		</script>
+	</body>
+</html>
