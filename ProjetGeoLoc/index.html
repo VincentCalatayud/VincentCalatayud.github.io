@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Projet</title>
+  </head>
+  <body style="display: flex; flex-direction: row;justify-content: space-evenly; background-color:grey">
+      <div>
+        <h1 style="text-align: center;">Projet Geo et Loc</h1>
+        <h2>Map</h2>
+        <div id="map" style="height: 500px; width: 500px"></div>
+        <h2>Position Actuelle</h2>
+        <div><p id="x"></p></div>
+        <div><p id="y"></p></div>
+        <div><p id="z"></p></div>
+        <h2>Distance entre ma position et les différents markers:</h2>
+        <div>
+          <table id="dist" style="border-collapse: collapse;">
+           <tr>
+              <th style='border: 1px solid black;'>Numéro markeur</th>
+              <th style='border: 1px solid black;'>Distance</th>
+              <th style='border: 1px solid black;'>Latitude</th>
+              <th style='border: 1px solid black;'>Longitude</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div style="margin-top: 6.5%;">
+        <h2 >Planète</h2>
+        <canvas id="earthCanvas" style="margin-top: 10%; width: 500px; height: 500px;"></canvas>
+        <button  onclick="afficherPays()">Afficher Pays</button>
+      </div>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://threejs.org/examples/js/loaders/GLTFLoader.js"></script>
+    <script type="text/javascript">
+    ///Varibale////////////////////////////////////////////////////////////////////////
+      var coordLatAct;
+      var coordLongAct;
+      var précision;
+      var map;
+      var nbMarqueur = 1;
+      var point = [];
+
+    ///ThreeJs///////////////////////////////////////////////////////////////////
+      const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 40, 1, 0.1, 1000 );
+      camera.position.z = 6 ;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: earthCanvas });
+			renderer.setSize( 500, 500 );
+			document.body.appendChild( renderer.domElement );
+
+      const controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+			const geometryE = new THREE.SphereGeometry(1, 32, 32);
+			const textureE = new THREE.TextureLoader().load( './img/2k_earth_daymap.jpg' );
+			const materialTexE = new THREE.MeshBasicMaterial( { map: textureE } );
+			const earth = new THREE.Mesh( geometryE, materialTexE );
+			earth.position.set(0,0,0);
+			scene.add( earth ) ;
+
+      var countries = new THREE.Group();
+
+      const light = new THREE.AmbientLight(0xffffff);
+      scene.add(light);
+
+      // White directional light at half intensity shining from the top.
+			const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.5 );
+			scene.add( directionalLight );
+
+      function convertisseur(lat, long)
+      {
+        var tab = [];
+        var latitudeConv = lat * (Math.PI / 180);
+        var longitudeConv = -long * (Math.PI / 180);
+        tab[0] = Math.cos(latitudeConv)*Math.cos(longitudeConv);
+        tab[2] = Math.cos(latitudeConv)*Math.sin(longitudeConv);
+        tab[1] = Math.sin(latitudeConv);
+
+        return tab;
+      }
+
+      function afficherPays(){
+
+        fetch("https://restcountries.com/v3.1/all")
+        .then(response => response.json())
+        .then(response => {
+        //response.forEach(element => convertisseur(element.latlng[0], element.latlng[1])
+          response.forEach(element => {
+          point = convertisseur(element.latlng[0], element.latlng[1]);
+          const geo = new THREE.SphereGeometry(0.01, 32, 32);
+          const texture = new THREE.TextureLoader().load( element.flags.png );
+          const material = new THREE.MeshBasicMaterial(  { map: texture } );
+          const sphere = new THREE.Mesh( geo, material );
+          sphere.position.set(point[0],point[1],point[2]);
+          countries.add(sphere);
+          })})
+          .catch(error => alert("Erreur : " + error));
+
+          scene.add(countries);
+      }
+
+      const animate = function () {
+				requestAnimationFrame( animate );
+        renderer.render( scene, camera );
+			};
+    ////OpenStreetMap///////////////////////////////////////////////////////////////////
+      function getLocation(){
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+            else{
+              document.getElementById("x").innerHTML= "Géolocalisation n'est pas prise en charge par ce navigateur.";
+            }
+      }
+
+      function showPosition(position)
+      {
+        ///Partie OpenStreetMap/////////////////////
+        coordLatAct = position.coords.latitude;
+        coordLongAct = position.coords.longitude;
+        précision = position.coords.accuracy;
+
+        map = L.map('map').setView([coordLatAct, coordLongAct], précision);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        L.marker([coordLatAct, coordLongAct]).addTo(map)
+        .bindPopup('Ma position')
+        .openPopup();
+
+        L.circle([coordLatAct, coordLongAct], {
+          radius: précision,
+          color: 'green'
+        }).addTo(map);
+
+        map.on("click", markerPos);
+
+        document.getElementById('x').innerHTML += "Latitude: "+coordLatAct;
+        document.getElementById('y').innerHTML += "Longitude: "+coordLongAct;
+        document.getElementById('z').innerHTML += "Précision: "+précision;
+        //L.polygon([[18.466, -66.118],[32.321, -64.757],[25.774, -80.19]], {color: 'red'}).addTo(map);
+
+
+        ///Partie Three js/////////////////////
+        point = convertisseur(position.coords.latitude, position.coords.longitude);
+        const gltfLoader = new THREE.GLTFLoader();
+        gltfLoader.load('./img/Avion.glb', function(gltf) {
+        console.log( gltf ) ;
+        var duck = gltf.scene ;
+        duck.scale.set(0.1, 0.1, 0.1) ;
+        duck.position.set(point[0],point[1],point[2]) ;
+        scene.add( duck ) ;
+        },
+        function ( xhr ) {
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+        },
+   
+        function ( error ) {
+        console.log( 'An error happened' );
+        }) ;
+      }
+
+      function markerPos(e){
+        //////Open Street Map/////////////////////////////////////////////////
+        L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
+        .bindPopup(nbMarqueur.toString())
+        .openPopup();
+
+        var from = turf.point([coordLatAct,coordLongAct]);
+        var to = turf.point([e.latlng.lat,e.latlng.lng]);
+        var options = {units: 'kilometers'};
+        var distance = turf.distance(from, to, options);
+        //alert("Distance entre ma position et Marseille : " + distance + " km.");
+        $("#dist").append("<tr><td style='border: 1px solid black;'>"+nbMarqueur.toString()+"</td><td style='border: 1px solid black;'>"+distance.toString()+"</td><td style='border: 1px solid black;'>"+e.latlng.lat.toString()+"</td><td style='border: 1px solid black;'>"+e.latlng.lng.toString()+"</td></tr>")
+
+        var line = new L.Polyline([[coordLatAct,coordLongAct], [e.latlng.lat,e.latlng.lng]], {
+            color: 'blue',
+            weight: 3,
+            opacity: 0.5,
+            smoothFactor: 1
+        }).addTo(map);
+
+        nbMarqueur++;
+        //////////Three Js//////////////////////////////////////////////////////
+        point = convertisseur(e.latlng.lat, e.latlng.lng);
+        const geo = new THREE.SphereGeometry(0.01, 32, 32);
+        const texture = new THREE.TextureLoader().load( { color: 0xffff00 }  );
+        const material = new THREE.MeshBasicMaterial(  { map: texture } );
+        const sphere = new THREE.Mesh( geo, material );
+        sphere.position.set(point[0],point[1],point[2]);
+        scene.add(sphere);
+      }
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      animate();
+      window.addEventListener("DOMContentLoaded",getLocation());
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    </script>
+  </body>
+</html>
